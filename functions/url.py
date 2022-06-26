@@ -21,3 +21,10 @@ def parse_image_url(text):
             images += [re.sub(pattern, r'\1', t)]
     return images
 
+def remove_urls_from_text(text):
+    pattern = r'^\s*(!?\[.+\])?\(?https?:\/\/\S+\)?$'
+    texts = []
+    for t in text.split('\n'):
+        texts += [re.sub(pattern, '', t)]
+    return '\n'.join(texts)
+

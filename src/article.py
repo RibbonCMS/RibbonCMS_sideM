@@ -17,7 +17,7 @@ from models.config import Config
 from functions.utils import color, is_future_than
 from functions.ogp.generate_ogp_image import generate_ogp_image
 from functions.ogp.external_ogp import dl_ogp, save_ogp, load_ogp
-from functions.url import parse_raw_url, parse_image_url
+from functions.url import parse_raw_url, parse_image_url, remove_urls_from_text
 from functions.images import dl_save_image, replace_image_urls
 from functions.tags import load_tags, save_tags
 from functions.related import related
@@ -41,7 +41,9 @@ def build_article(consts, issue):
 
     description = issue.get_fm('ogp_description')
     if description is None or description == '':
-        description = issue.md.replace('\n', ' ')[:200]
+        text = remove_urls_from_text(issue.md)
+        print(text)
+        description = text.replace('\n', ' ')[:200]
         if len(issue.md) > 200:
             description += '...'
 
