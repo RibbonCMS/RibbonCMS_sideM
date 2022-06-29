@@ -11,6 +11,7 @@ from PIL import Image
 import urllib.request
 import hashlib
 import re
+import requests
 
 def dl_image(url):
     try:
@@ -44,6 +45,8 @@ def dl_save_image(
             extension="webp",
             max_image_width=600,
         ):
+    if url.split('.')[-1] == 'gif':
+        return dl_save_gif(url, save_dir, save_dir_prd)
     if file_name is None:
         file_name = hashlib.md5(url.encode()).hexdigest()
     file_name = f"{file_name}.{extension}"
@@ -57,6 +60,27 @@ def dl_save_image(
         save_image(img, dst_path)
         return {"url": url, "path": dst_prd_path}
     else:
+        return {"url": url, "path": None}
+
+def dl_save_gif(
+            url,
+            save_dir,
+            save_dir_prd,
+            file_name=None,
+        ):
+    if file_name is None:
+        file_name = hashlib.md5(url.encode()).hexdigest()
+    file_name = f"{file_name}.gif"
+    dst_path = f"{save_dir}/{file_name}"
+    dst_prd_path = f"{save_dir_prd}/{file_name}"
+
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    try:
+        with open(dst_path, 'wb') as f:
+            f.write(requests.get(url).content)   
+        return {"url": url, "path": dst_prd_path}
+    except:
         return {"url": url, "path": None}
 
 def replace_image_urls(text, url, path):
