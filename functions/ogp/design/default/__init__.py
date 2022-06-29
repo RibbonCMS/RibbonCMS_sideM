@@ -27,10 +27,10 @@ class Design(AbstractDesign):
 
         """ title settings """
         self.side_padding = 250
-        self.text_pos_h = 200
+        self.text_pos_h = 180
         self.title_font_size = 64
         self.title_margin_h = 50
-        self.title_texts = tokenize(article.title)
+        self.title_texts = article.title
 
         """ author settings """
         self.author_pos_h = 508
@@ -46,11 +46,13 @@ class Design(AbstractDesign):
         self.author_text = config['author_name']
 
     def create(self):
+        # Background image
         if self.thumbnail_image is None:
             base_img = Image.open(self.ogp_base_img_path).copy()
         else:
             base_img = self.thumbnail_image
 
+        # Icon image
         if self.ogp_icon_img_path is not None:
             icon_img = Image.open(self.ogp_icon_img_path).copy()
             base_img = paste_icon_image(
@@ -62,40 +64,40 @@ class Design(AbstractDesign):
                     icon_pos_w = self.icon_pos_w,
                 )
 
+        # Title text
         draw = ImageDraw.Draw(base_img)
         font = ImageFont.truetype(self.font_black_path, self.title_font_size)
-        text = self.title_texts[0]
-        multiline = False
-        for i, title_text in enumerate(self.title_texts):
-            if i==0:
-                continue
-            if is_text_size_ok(draw, font, text+title_text, base_img.size[0], self.side_padding, text_padding=250):
-                text += title_text
-            else:
-                base_img = add_centered_text(
-                        base_img, 
-                        text,
-                        self.font_black_path, 
-                        self.title_font_size, 
-                        (64, 64, 64), 
-                        self.text_pos_h, 
-                        self.side_padding,
-                    )
-                text = ''.join(self.title_texts[i:])
-                self.text_pos_h += self.title_font_size
-                multiline = True
-                break
-        self.text_pos_h = self.text_pos_h + self.title_margin_h if multiline else self.text_pos_h + self.title_margin_h//2
-        base_img = add_centered_text(
-                base_img, 
-                text,
-                self.font_black_path, 
-                self.title_font_size, 
-                (64, 64, 64), 
-                self.text_pos_h, 
-                self.side_padding,
-            )
+        title_text_tokens = [token.replace('　', ' ') for token in tokenize(self.title_texts.replace(' ', '　')) if token != '']
+        if is_text_size_ok(draw, font, ''.join(title_text_tokens), base_img.size[0], self.side_padding, text_padding=0):
+            title_text = [''.join(title_text_tokens)]
+        else:
+            title_text = []
+            text = ''
+            for token in title_text_tokens:
+                if is_text_size_ok(draw, font, text+token, base_img.size[0], self.side_padding, text_padding=250):
+                    text += token
+                else:
+                    title_text += [text]
+                    text = token
+            title_text += [text]
 
+        if len(title_text) == 1:
+            self.text_pos_h = self.text_pos_h + self.title_margin_h
+        else:
+            title_text[1] = ''.join(title_text[1:])
+        for text in title_text[:2]:
+            base_img = add_centered_text(
+                    base_img, 
+                    text,
+                    self.font_black_path, 
+                    self.title_font_size, 
+                    (64, 64, 64), 
+                    self.text_pos_h, 
+                    self.side_padding,
+                )
+            self.text_pos_h = self.text_pos_h + self.title_font_size + self.title_margin_h
+
+        # Author name
         base_img = add_lefted_text(
                 base_img, 
                 self.author_text, 

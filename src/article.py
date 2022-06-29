@@ -42,7 +42,6 @@ def build_article(consts, issue):
     description = issue.get_fm('ogp_description')
     if description is None or description == '':
         text = remove_urls_from_text(issue.md)
-        print(text)
         description = text.replace('\n', ' ')[:200]
         if len(issue.md) > 200:
             description += '...'
