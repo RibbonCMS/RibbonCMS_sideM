@@ -7,17 +7,16 @@ import site
 import importlib
 from importlib import import_module
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+import pytz
 
 
 def format_time(t):
     if t=="":
         return ""
-    return (datetime.strptime(t, '%Y-%m-%dT%H:%M:%SZ') + timedelta(hours=9)).strftime('%Y年%m月%d日 %H時%M分')
+    return datetime.strptime(t, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=pytz.utc)
 
 def is_future_than(t1, t2):
-    t1 = datetime.strptime(t1, '%Y年%m月%d日 %H時%M分')
-    t2 = datetime.strptime(t2, '%Y年%m月%d日 %H時%M分')
     return t1 > t2
 
 def color(text, color):
