@@ -74,6 +74,9 @@ def delete_article(consts, issue):
     save_tags(updated_tags, tags_dir)
     print('update', f'{tags_dir}/tags.json')
 
+    """ グローバルコンフィグのロード """
+    config = Config.load(consts)
+
     """ --- 関連記事の算出 --- """
     print()
     print(color('Create Related:', "LIGHT_RED"))
