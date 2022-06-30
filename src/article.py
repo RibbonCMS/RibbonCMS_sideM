@@ -14,7 +14,7 @@ import json
 
 from models.article import Article
 from models.config import Config
-from functions.utils import color, is_future_than
+from functions.utils import color, is_future_than, format_time
 from functions.ogp.generate_ogp_image import generate_ogp_image
 from functions.ogp.external_ogp import dl_ogp, save_ogp, load_ogp
 from functions.url import parse_raw_url, parse_image_url, remove_urls_from_text
@@ -47,7 +47,7 @@ def build_article(consts, issue):
             description += '...'
 
     """ issue frontmatterで投稿日時が指定されている場合それを使う """
-    issue.posted_at = issue.get_fm('posted_at')
+    issue.posted_at = format_time(issue.get_fm('posted_at'), human_format=True)
     if issue.posted_at is None:
         issue.posted_at = issue.closed_at
 

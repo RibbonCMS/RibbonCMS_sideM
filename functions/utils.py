@@ -6,15 +6,24 @@ import pip
 import site
 import importlib
 from importlib import import_module
-
 from datetime import datetime, timedelta, timezone
-import pytz
 
 
-def format_time(t):
+def format_time(t, human_format=False):
     if t=="":
         return ""
-    return datetime.strptime(t, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=pytz.utc)
+    if human_format:
+        ymd, hms = t.split(' ')
+        if len(hms.split(':'))==2:
+            hms += ':00'
+    else:
+        ymd = t.split('T')[0]
+        hms = t.split('T')[1].split('Z')[0]
+
+    year, month, date = [int(t) for t in ymd.split('-')]
+    hour, minute, second = [int(t) for t in hms.split(':')]
+    dt = datetime(year, month, date, hour, minute, second, 0, timezone.utc)
+    return dt
 
 def is_future_than(t1, t2):
     return t1 > t2
