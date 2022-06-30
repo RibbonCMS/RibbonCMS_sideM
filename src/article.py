@@ -48,7 +48,7 @@ def build_article(consts, issue):
 
     """ issue frontmatterで投稿日時が指定されている場合それを使う """
     issue.posted_at = format_time(issue.get_fm('posted_at'), human_format=True)
-    if issue.posted_at is None:
+    if issue.posted_at is '':
         issue.posted_at = issue.closed_at
 
     print()
