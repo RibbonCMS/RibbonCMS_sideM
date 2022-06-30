@@ -28,12 +28,12 @@ def main(consts):
     print(f"\n{color('Issue Params:', 'LIGHT_RED')}")
     print(issue)
 
-    if issue.is_include([consts.ARTICLE_FLAG_LABEL]):
+    if issue.is_include([consts.DELETE_FLAG_LABEL]):
+        delete_article(consts, issue)
+    elif issue.is_include([consts.ARTICLE_FLAG_LABEL]):
         build_article(consts, issue)
     elif issue.is_include([consts.CONFIG_FLAG_LABEL]):
         build_config(consts, issue)
-    elif issue.is_include([consts.DELETE_FLAG_LABEL]):
-        delete_article(consts, issue)
     elif issue.is_include([consts.FIXED_FLAG_LABEL]):
         build_fixed(consts, issue)
 
