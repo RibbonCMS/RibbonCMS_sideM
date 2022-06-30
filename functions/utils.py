@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 
 
 def format_time(t, human_format=False):
-    if t=="":
+    if t=="" or t is None:
         return ""
     if human_format:
         ymd, hms = t.split(' ')
