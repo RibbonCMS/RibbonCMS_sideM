@@ -14,6 +14,7 @@ import shutil
 from glob import glob
 
 from models.article import Article
+from models.config import Config
 from functions.tags import load_tags, save_tags
 from functions.related import related
 from functions.utils import color
