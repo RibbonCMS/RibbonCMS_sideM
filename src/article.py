@@ -49,7 +49,7 @@ def build_article(consts, issue):
     """ issue frontmatterで投稿日時が指定されている場合それを使う """
     issue.posted_at = format_time(issue.get_fm('posted_at'), human_format=True)
     if issue.posted_at is '':
-        issue.posted_at = issue.closed_at
+        issue.posted_at = issue.labeled_at
 
     print()
     if article.posted_at is None:
@@ -57,12 +57,12 @@ def build_article(consts, issue):
         posted_at = issue.posted_at
         updated_at = ''
         print('新規投稿')
-    elif is_future_than(issue.posted_at, issue.closed_at):
+    elif is_future_than(issue.posted_at, issue.labeled_at):
         """ 投稿済み投稿の公開時間の変更(指定時間が未来なので無条件で未公開化) """
         posted_at = issue.posted_at
         updated_at = ''
         print('投稿済み投稿の公開時間の変更')
-    elif is_future_than(article.posted_at, issue.closed_at):
+    elif is_future_than(article.posted_at, issue.labeled_at):
         """ 投稿済み未公開投稿の公開時間の変更(指定時間が過去・現在未公開なので公開される) """
         posted_at = issue.posted_at
         updated_at = ''
@@ -70,7 +70,7 @@ def build_article(consts, issue):
     else:
         """ 投稿・公開済み投稿の更新時間の変更(指定時間が過去・公開済みなので現在時間に更新した扱いになる) """
         posted_at = None
-        updated_at = issue.closed_at
+        updated_at = issue.labeled_at
         print('投稿・公開済み投稿の更新時間の変更')
 
     article.update(

@@ -14,7 +14,7 @@ Attributes:
                 "name": string,
                 "node_id": string,
                 "url": string
-    closed_at (None | string): Datetime of the issue closed 
+    labeled_at (None | string): Datetime of the issue labeled 
                         => "%Y年%m月%d日 %H時%M分"
     md (None | string): Parsed markdown of the Issue body
     fm (None | Dict): Parsed frontmatter of the Issue body
@@ -37,7 +37,7 @@ class Issue():
         self.id = self._read_id()
         self.title = self._read_title()
         self.labels = self._read_labels()
-        self.closed_at = self._read_closed_at()
+        self.labeled_at = self._read_labeled_at()
         self.fm, self.md = self._read_body()
 
     def _read_txt(self, filepath):
@@ -68,8 +68,8 @@ class Issue():
             text = json.loads(text)
         return text
 
-    def _read_closed_at(self):
-        filepath = f'{self.issue_path}/closed_at.txt'
+    def _read_labeled_at(self):
+        filepath = f'{self.issue_path}/labeled_at.txt'
         text = self._read_txt(filepath)
         if text is not None:
             text = text.split('\n')[0]
@@ -112,7 +112,7 @@ class Issue():
         string += [color_params(f"issue.id = '{self.id}'")]
         string += [color_params(f"issue.title = '{self.title}'")]
         string += [color_params(f"issue.labels = {labels}")]
-        string += [color_params(f"issue.closed_at = '{self.closed_at}'")]
+        string += [color_params(f"issue.labeled_at = '{self.labeled_at}'")]
         string += [color_params(f"issue.fm = {fm}")]
         string += [color_params(f"issue.md = '{omit_md}'")]
         return "\n".join(string)
