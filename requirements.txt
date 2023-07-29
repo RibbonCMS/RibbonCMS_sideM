@@ -10,7 +10,7 @@ py-ogp-parser==0.2.1
 PyYAML==6.0
 requests==2.27.1
 scikit-learn==1.1.1
-scipy==1.8.1
+scipy==1.10.0
 sklearn==0.0
 soupsieve==2.3.2.post1
 threadpoolctl==3.1.0
