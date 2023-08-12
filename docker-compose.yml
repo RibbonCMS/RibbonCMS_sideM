@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  python:
+    build: .
+    image: ribbon_cms/side_m
+    container_name: side_m_container
+    volumes:
+      - .:/usr/src/app
+    tty: true
