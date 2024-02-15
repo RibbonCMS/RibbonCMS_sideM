@@ -19,7 +19,8 @@ def dl_image(url):
             img = io.BytesIO(web_file.read())
             img = Image.open(img)
         return img
-    except:
+    except Exception as e:
+        print(e)
         return None
 
 def save_image(img, save_path):
