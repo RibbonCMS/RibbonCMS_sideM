@@ -100,6 +100,7 @@ def build_article(consts, issue):
     --------------------------
     """
     image_urls = parse_image_url(article.markdown)
+    print("image_urls:", image_urls)
     for url in image_urls:
         image_url = dl_save_image(
             url=url,
@@ -108,6 +109,7 @@ def build_article(consts, issue):
             extension='webp',
             max_image_width=600,
         )
+        print(' - image_url:', image_url)
         if image_url['path'] is not None:
             article.markdown = replace_image_urls(
                     text=article.markdown,
